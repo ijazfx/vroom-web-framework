@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.openkoncept.net/schema/vroom-config-2.1.xsd"
+            xmlns:vrm="http://www.openkoncept.net/schema/vroom-config-2.1.xsd"
+            elementFormDefault="qualified">
+    <xsd:element name="vroom-config">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="vrm:webpage" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="webpage">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="vrm:meta" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="vrm:stylesheet" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="vrm:script" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="vrm:object" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="vrm:form" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="vrm:element" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="vrm:event" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="uri" type="xsd:string" use="required"/>
+            <xsd:attribute name="bean-class" type="xsd:string"/>
+            <xsd:attribute name="var" type="xsd:string"/>
+            <xsd:attribute name="scope" type="vrm:scopeType" default="session"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="object">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="vrm:event" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required"/>
+            <xsd:attribute name="bean-class" type="xsd:string"/>
+            <xsd:attribute name="var" type="xsd:string"/>
+            <xsd:attribute name="scope" type="vrm:scopeType" default="session"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="form">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="vrm:navigation" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="element" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="vrm:event" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                        <xsd:attribute name="id" type="xsd:string" use="required"/>
+                        <xsd:attribute name="property" type="xsd:string"/>
+                        <xsd:attribute name="format" type="xsd:string"/>
+                        <xsd:attribute name="bean-class" type="xsd:string"/>
+                        <xsd:attribute name="var" type="xsd:string"/>
+                        <xsd:attribute name="scope" type="vrm:scopeType" default="session"/>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element ref="vrm:event" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="method" type="xsd:string"/>
+            <xsd:attribute name="bean-class" type="xsd:string"/>
+            <xsd:attribute name="var" type="xsd:string"/>
+            <xsd:attribute name="scope" type="vrm:scopeType" default="session"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="navigation">
+        <xsd:complexType>
+            <xsd:attribute name="outcome" type="xsd:string" use="required"/>
+            <xsd:attribute name="url" type="xsd:string" use="required"/>
+            <xsd:attribute name="forward" type="xsd:boolean" default="false"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="element">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="vrm:event" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="bean-class" type="xsd:string"/>
+            <xsd:attribute name="var" type="xsd:string"/>
+            <xsd:attribute name="scope" type="vrm:scopeType" default="session"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="event">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="vrm:call" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="type" type="vrm:eventTypeList" use="required"/>
+            <xsd:attribute name="method" type="xsd:string"/>
+            <xsd:attribute name="sync" type="xsd:boolean" default="false"/>
+            <xsd:attribute name="bean-class" type="xsd:string"/>
+            <xsd:attribute name="var" type="xsd:string"/>
+            <xsd:attribute name="scope" type="vrm:scopeType" default="session"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="call">
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="type" type="vrm:callType" use="required"/>
+                    <xsd:attribute name="name" type="xsd:string"/>
+                    <xsd:attribute name="tag" type="xsd:string"/>
+                    <xsd:attribute name="id" type="xsd:string"/>
+                    <xsd:attribute name="attribute" type="xsd:string"/>
+                    <xsd:attribute name="value" type="xsd:string"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="stylesheet">
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="type" type="vrm:stylesheetTypeList"/>
+                    <xsd:attribute name="url" type="xsd:string"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="script">
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="type" type="vrm:scriptTypeList"/>
+                    <xsd:attribute name="url" type="xsd:string"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="meta">
+        <xsd:complexType>
+            <xsd:attribute name="name" type="xsd:string"/>
+            <xsd:attribute name="http-equiv" type="xsd:string"/>
+            <xsd:attribute name="content" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:simpleType name="eventTypeList">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="onclick"/>
+            <xsd:enumeration value="ondblclick"/>
+            <xsd:enumeration value="onmousedown"/>
+            <xsd:enumeration value="onmouseup"/>
+            <xsd:enumeration value="onmouseover"/>
+            <xsd:enumeration value="onmousemove"/>
+            <xsd:enumeration value="onmouseout"/>
+            <xsd:enumeration value="onkeypress"/>
+            <xsd:enumeration value="onkeydown"/>
+            <xsd:enumeration value="onkeyup"/>
+            <xsd:enumeration value="onload"/>
+            <xsd:enumeration value="onunload"/>
+            <xsd:enumeration value="onabort"/>
+            <xsd:enumeration value="onerror"/>
+            <xsd:enumeration value="onresize"/>
+            <xsd:enumeration value="onscroll"/>
+            <xsd:enumeration value="onselect"/>
+            <xsd:enumeration value="onchange"/>
+            <xsd:enumeration value="onsubmit"/>
+            <xsd:enumeration value="onreset"/>
+            <xsd:enumeration value="onfocus"/>
+            <xsd:enumeration value="onblur"/>
+            <xsd:enumeration value="ondomfocusin"/>
+            <xsd:enumeration value="ondomfocusout"/>
+            <xsd:enumeration value="ondomactivate"/>
+            <xsd:enumeration value="onsubtreemodified"/>
+            <xsd:enumeration value="onnodeinserted"/>
+            <xsd:enumeration value="onnoderemoved"/>
+            <xsd:enumeration value="ondomnoderemovedfromdocument"/>
+            <xsd:enumeration value="ondomnodeinsertedintodocument"/>
+            <xsd:enumeration value="onattrmodified"/>
+            <xsd:enumeration value="oncharacterdatamodified"/>
+            <xsd:enumeration value="ms-oncut"/>
+            <xsd:enumeration value="ms-oncopy"/>
+            <xsd:enumeration value="ms-onpaste"/>
+            <xsd:enumeration value="ms-onbeforecut"/>
+            <xsd:enumeration value="ms-onbeforecopy"/>
+            <xsd:enumeration value="ms-onbeforepaste"/>
+            <xsd:enumeration value="ms-onafterupdate"/>
+            <xsd:enumeration value="ms-onbeforeupdate"/>
+            <xsd:enumeration value="ms-oncellchange"/>
+            <xsd:enumeration value="ms-ondataavailable"/>
+            <xsd:enumeration value="ms-ondatasetchanged"/>
+            <xsd:enumeration value="ms-ondatasetcomplete"/>
+            <xsd:enumeration value="ms-onerrorupdate"/>
+            <xsd:enumeration value="ms-onrowenter"/>
+            <xsd:enumeration value="ms-onrowexit"/>
+            <xsd:enumeration value="ms-onrowsdeleted"/>
+            <xsd:enumeration value="ms-onrowinserted"/>
+            <xsd:enumeration value="ms-oncontextmenu"/>
+            <xsd:enumeration value="ms-ondrag"/>
+            <xsd:enumeration value="ms-ondragstart"/>
+            <xsd:enumeration value="ms-ondragenter"/>
+            <xsd:enumeration value="ms-ondragover"/>
+            <xsd:enumeration value="ms-ondragleave"/>
+            <xsd:enumeration value="ms-ondragend"/>
+            <xsd:enumeration value="ms-ondrop"/>
+            <xsd:enumeration value="ms-onselectstart"/>
+            <xsd:enumeration value="ms-onhelp"/>
+            <xsd:enumeration value="ms-onbeforeunload"/>
+            <xsd:enumeration value="ms-onstop"/>
+            <xsd:enumeration value="ms-onbeforeeditfocus"/>
+            <xsd:enumeration value="ms-onstart"/>
+            <xsd:enumeration value="ms-onfinish"/>
+            <xsd:enumeration value="ms-onbounce"/>
+            <xsd:enumeration value="ms-onbeforeprint"/>
+            <xsd:enumeration value="ms-onafterprint"/>
+            <xsd:enumeration value="ms-onpropertychange"/>
+            <xsd:enumeration value="ms-onfilterchange"/>
+            <xsd:enumeration value="ms-onreadystatechange"/>
+            <xsd:enumeration value="ms-onlosecapture"/>
+            <xsd:enumeration value="xul-DOMMouseScroll"/>
+            <xsd:enumeration value="xul-ondragdrop"/>
+            <xsd:enumeration value="xul-ondragenter"/>
+            <xsd:enumeration value="xul-ondragexit"/>
+            <xsd:enumeration value="xul-ondraggesture"/>
+            <xsd:enumeration value="xul-ondragover"/>
+            <xsd:enumeration value="xul-CheckboxStateChange"/>
+            <xsd:enumeration value="xul-RadioStateChange"/>
+            <xsd:enumeration value="xul-onclose"/>
+            <xsd:enumeration value="xul-oncommand"/>
+            <xsd:enumeration value="xul-oninput"/>
+            <xsd:enumeration value="xul-DOMMenuItemActive"/>
+            <xsd:enumeration value="xul-DOMMenuItemInactive"/>
+            <xsd:enumeration value="xul-oncontextmenu"/>
+            <xsd:enumeration value="xul-onoverflow"/>
+            <xsd:enumeration value="xul-onoverflowchanged"/>
+            <xsd:enumeration value="xul-onunderflow"/>
+            <xsd:enumeration value="xul-onpopuphidden"/>
+            <xsd:enumeration value="xul-onpopuphiding"/>
+            <xsd:enumeration value="xul-onpopupshowing"/>
+            <xsd:enumeration value="xul-onpopupshown"/>
+            <xsd:enumeration value="xul-onbroadcast"/>
+            <xsd:enumeration value="xul-oncommandupdate"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="eventType">
+        <xsd:union memberTypes="vrm:eventTypeList xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="callType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="update"/>
+            <xsd:enumeration value="script"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="scopeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="application"/>
+            <xsd:enumeration value="session"/>
+            <xsd:enumeration value="request"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="stylesheetTypeList">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="text/css"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="stylesheetType">
+        <xsd:union memberTypes="vrm:stylesheetTypeList xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="scriptTypeList">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="text/javascript"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="scriptType">
+        <xsd:union memberTypes="vrm:scriptTypeList xsd:string"/>
+    </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,9 @@
+<vroom-config xmlns="http://www.openkoncept.net/schema/vroom-config-2.1.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openkoncept.net/schema/vroom-config-2.1.xsd vroom-config-2.1.xsd">
+    <!-- Your definitions go here! -->
+    <webpage uri="/|[/a-zA-Z0-9-_]*.(jsp|html)">
+        
+    </webpage>
+    
+</vroom-config>

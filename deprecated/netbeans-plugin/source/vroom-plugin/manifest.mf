@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+OpenIDE-Module: net.openkoncept.vroom.plugin
+OpenIDE-Module-Layer: net/openkoncept/vroom/plugin/layer.xml
+OpenIDE-Module-Localizing-Bundle: net/openkoncept/vroom/plugin/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
+Name: net/openkoncept/vroom/plugin/VroomConfigDataLoader.class
+Install-Before: org.openide.loaders.XMLDataObject, org.netbeans.modules.xml.XMLDataObject
+OpenIDE-Module-Class: Loader
+

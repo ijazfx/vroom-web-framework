@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE library PUBLIC "-//NetBeans//DTD Library Declaration 1.0//EN" "http://www.netbeans.org/dtds/library-declaration-1_0.dtd">
+<library version="1.0">
+    <name>Vroom-2.1.4</name>
+    <type>j2se</type>
+    <localizing-bundle>net.openkoncept.vroom.plugin.Bundle</localizing-bundle>
+    <volume>
+        <type>classpath</type>
+        <resource>jar:nbinst://net.openkoncept.vroom.plugin/libs/commons-beanutils.jar!/</resource>
+        <resource>jar:nbinst://net.openkoncept.vroom.plugin/libs/commons-fileupload-1.2.1.jar!/</resource>
+        <resource>jar:nbinst://net.openkoncept.vroom.plugin/libs/commons-io-1.4.jar!/</resource>
+        <resource>jar:nbinst://net.openkoncept.vroom.plugin/libs/commons-logging-1.1.1.jar!/</resource>
+        <resource>jar:nbinst://net.openkoncept.vroom.plugin/libs/vroom.jar!/</resource>
+    </volume>
+    <volume>
+        <type>src</type>
+    </volume>
+    <volume>
+        <type>javadoc</type>
+    </volume>
+</library>
