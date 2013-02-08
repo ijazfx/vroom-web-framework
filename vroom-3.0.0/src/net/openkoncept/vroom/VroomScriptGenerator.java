@@ -71,101 +71,93 @@ public class VroomScriptGenerator {
         StringBuffer sbScript = new StringBuffer();
         String wpBeanClass = "";
         String wpVar = "";
-        String wpScope = "";
-        /** iterator throw all the webpages and prepare functions for those
-         * where uri of the webpage matches with the request uri. the init() 
-         * function should contain all the vroomSetForm(...) calls and
-         * at the end those should regiter the events generated for webpage,
-         * form and elements.
-         */
-        Iterator iwp = vc.getWebpages().iterator();
-        while (iwp.hasNext()) {
-            Webpage wp = (Webpage) iwp.next();
+        ScopeType wpScope = null;
+        for (Webpage wp : vc.getWebpage()) {
             wpBeanClass = (wp.getBeanClass() != null) ? wp.getBeanClass() : wpBeanClass;
             wpVar = (wp.getVar() != null) ? wp.getVar() : wpVar;
             wpScope = wp.getScope();
             // proceed only if the request uri matches with the webpage uri defined in vroom's config file.
             if (uri.matches(wp.getUri())) {
                 // Process all objects...
-                Iterator iobj = wp.getObjects().iterator();
+                Iterator<net.openkoncept.vroom.config.Object> iobj = wp.getObject().iterator();
                 while (iobj.hasNext()) {
-                    Obj o = (Obj) iobj.next();
+                    net.openkoncept.vroom.config.Object o = iobj.next();
                     String oBeanClass = (o.getBeanClass() != null) ? o.getBeanClass() : wpBeanClass;
                     String oVar = (o.getVar() != null) ? o.getVar() : wpVar;
-                    String oScope = (o.getBeanClass() != null) ? o.getScope() : wpScope;
+                    ScopeType oScope = (o.getBeanClass() != null) ? o.getScope() : wpScope;
                     // Process events of the object...
-                    Iterator ievent = o.getEvents().iterator();
+                    Iterator<Event> ievent = o.getEvent().iterator();
                     while (ievent.hasNext()) {
-                        Event ev = (Event) ievent.next();
+                        Event ev = ievent.next();
                         String evBeanClass = (ev.getBeanClass() != null) ? ev.getBeanClass() : oBeanClass;
                         String evVar = (ev.getVar() != null) ? ev.getVar() : oVar;
-                        String evScope = (ev.getBeanClass() != null) ? ev.getScope() : oScope;
-                        lstFunctions.add(jsFunction(o.getName(), null, ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCalls()));
+                        ScopeType evScope = (ev.getBeanClass() != null) ? ev.getScope() : oScope;
+                        lstFunctions.add(jsFunction(o.getName(), null, ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCall()));
                     }
                 }
                 // Process all the forms...
-                Iterator ifrm = wp.getForms().iterator();
+                Iterator<Form> ifrm = wp.getForm().iterator();
                 while (ifrm.hasNext()) {
-                    Form f = (Form) ifrm.next();
+                    Form f = ifrm.next();
                     String fBeanClass = (f.getBeanClass() != null) ? f.getBeanClass() : wpBeanClass;
                     String fVar = (f.getVar() != null) ? f.getVar() : wpVar;
-                    String fScope = (f.getBeanClass() != null) ? f.getScope() : wpScope;
+                    ScopeType fScope = (f.getBeanClass() != null) ? f.getScope() : wpScope;
                     if (f.getMethod() != null) {
                         lstInitFunctionCalls.add(jsSetForm(f.getId(), f.getMethod(), fBeanClass, fVar, fScope, uri));
                     }
                     // Process all the elements...
-                    Iterator ielem = f.getElements().iterator();
+                    Iterator<Element> ielem = f.getElement().iterator();
                     while (ielem.hasNext()) {
-                        Element e = (Element) ielem.next();
+                        Element e = ielem.next();
                         String eBeanClass = (e.getBeanClass() != null) ? e.getBeanClass() : fBeanClass;
                         String eVar = (e.getVar() != null) ? e.getVar() : fVar;
-                        String eScope = (e.getBeanClass() != null) ? e.getScope() : fScope;
+                        ScopeType eScope = (e.getBeanClass() != null) ? e.getScope() : fScope;
                         // Process events for the element...
-                        Iterator ievent = e.getEvents().iterator();
+                        Iterator<Event> ievent = e.getEvent().iterator();
                         while (ievent.hasNext()) {
-                            Event ev = (Event) ievent.next();
+                            Event ev = ievent.next();
                             String evBeanClass = (ev.getBeanClass() != null) ? ev.getBeanClass() : eBeanClass;
                             String evVar = (ev.getVar() != null) ? ev.getVar() : eVar;
-                            String evScope = (ev.getBeanClass() != null) ? ev.getScope() : eScope;
-                            lstFunctions.add(jsFunction(null, e.getId(), ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCalls()));
+                            ScopeType evScope = (ev.getBeanClass() != null) ? ev.getScope() : eScope;
+                            lstFunctions.add(jsFunction(null, e.getId(), ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCall()));
                         }
                     }
                     // Process events for the element...
-                    Iterator ievent = f.getEvents().iterator();
+                    Iterator<Event> ievent = f.getEvent().iterator();
                     while (ievent.hasNext()) {
-                        Event ev = (Event) ievent.next();
+                        Event ev = ievent.next();
                         String evBeanClass = (ev.getBeanClass() != null) ? ev.getBeanClass() : fBeanClass;
                         String evVar = (ev.getVar() != null) ? ev.getVar() : fVar;
-                        String evScope = (ev.getBeanClass() != null) ? ev.getScope() : fScope;
-                        lstFunctions.add(jsFunction(null, f.getId(), ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCalls()));
+                        ScopeType evScope = (ev.getBeanClass() != null) ? ev.getScope() : fScope;
+                        lstFunctions.add(jsFunction(null, f.getId(), ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCall()));
                     }
 
                 }
                 // Process all the elements...
-                Iterator ielem = wp.getElements().iterator();
+                Iterator<Element> ielem = wp.getElement().iterator();
                 while (ielem.hasNext()) {
-                    Element e = (Element) ielem.next();
+                    Element e = ielem.next();
                     String eBeanClass = (e.getBeanClass() != null) ? e.getBeanClass() : wpBeanClass;
                     String eVar = (e.getVar() != null) ? e.getVar() : wpVar;
-                    String eScope = (e.getBeanClass() != null) ? e.getScope() : wpScope;
+                    ScopeType eScope = (e.getBeanClass() != null) ? e.getScope() : wpScope;
                     // Process events for the element...
-                    Iterator ievent = e.getEvents().iterator();
+                    Iterator<Event> ievent = e.getEvent().iterator();
                     while (ievent.hasNext()) {
-                        Event ev = (Event) ievent.next();
+                        Event ev = ievent.next();
                         String evBeanClass = (ev.getBeanClass() != null) ? ev.getBeanClass() : eBeanClass;
                         String evVar = (ev.getVar() != null) ? ev.getVar() : eVar;
-                        String evScope = (ev.getBeanClass() != null) ? ev.getScope() : eScope;
-                        lstFunctions.add(jsFunction(null, e.getId(), ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCalls()));
+                        ScopeType evScope = (ev.getBeanClass() != null) ? ev.getScope() : eScope;
+                        lstFunctions.add(jsFunction(null, e.getId(), ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCall()));
                     }
                 }
                 // Process all the events...
-                Iterator ievent = wp.getEvents().iterator();
+                Iterator<Event> ievent = wp.getEvent().iterator();
                 while (ievent.hasNext()) {
-                    Event ev = (Event) ievent.next();
+                    Event ev = ievent.next();
                     String evBeanClass = (ev.getBeanClass() != null) ? ev.getBeanClass() : wpBeanClass;
                     String evVar = (ev.getVar() != null) ? ev.getVar() : wpVar;
-                    String evScope = (ev.getBeanClass() != null) ? ev.getScope() : wpScope;
-                    lstFunctions.add(jsFunction(null, null, ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCalls()));
+                    ScopeType evScope = (ev.getBeanClass() != null) ? ev.getScope() : wpScope;
+                    lstFunctions.add(jsFunction(null, null, ev.getType(), ev.getMethod(), ev.isSync(), evBeanClass, evVar, evScope, ev.getCall()));
                 }
             }
         }
@@ -205,6 +197,10 @@ public class VroomScriptGenerator {
         return sb.toString();
     }
 
+    private String jsSetForm(String id, String method, String fBeanClass, String fVar, ScopeType fScope, String uri) {
+        return jsSetForm(id, method, fBeanClass, fVar, fScope.value(), uri);
+    }
+    
     /**
      * <p>
      * This method generates a java script function that is called in the init() java script function of the uri. This
@@ -229,6 +225,10 @@ public class VroomScriptGenerator {
         return sb.toString();
     }
 
+    private String jsFunction(String name, String id, EventTypeList type, String method, boolean sync, String evBeanClass, String evVar, ScopeType evScope, List<Call> call) {
+        return jsFunction(name, id, type.value(), method, sync, evBeanClass, evVar, evScope.value(), call);
+    }
+    
     /**
      * <p>
      * This method generates a java script function based on the event type.
@@ -245,7 +245,7 @@ public class VroomScriptGenerator {
      * @param calls     - List of calls to process
      * @return - String of javascript function
      */
-    private String jsFunction(String name, String id, String type, String method, Boolean sync, String beanClass, String var, String scope, List calls) {
+    private String jsFunction(String name, String id, String type, String method, Boolean sync, String beanClass, String var, String scope, List<Call> calls) {
         String functionName = (id != null) ? jsFunctionName(id, type) : jsFunctionName("window", type);//jsFunctionName(type);
         Integer count = (Integer) functionCountMap.get(functionName);
         if (count == null) {
@@ -270,7 +270,7 @@ public class VroomScriptGenerator {
         while (iter.hasNext()) {
             Call call = (Call) iter.next();
             sbCalls.append(call.getType() + "|");
-            if (Constants.CALL_TYPE_UPDATE.equals(call.getType())) {
+            if (CallType.UPDATE.equals(call.getType())) {
                 sbCalls.append(call.getId() + "|");
                 sbCalls.append(call.getTag() + "|");
                 sbCalls.append(call.getName() + "|");
@@ -379,4 +379,5 @@ public class VroomScriptGenerator {
 //        sb.append("} catch(e) { alert(e); }\n");
 //        return sb.toString();
 //    }
+
 }

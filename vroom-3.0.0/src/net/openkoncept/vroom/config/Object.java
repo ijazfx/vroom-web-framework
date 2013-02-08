@@ -13,6 +13,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -27,12 +28,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.openkoncept.net/schema/vroom-config/3.0}navigation" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element ref="{http://www.openkoncept.net/schema/vroom-config/3.0}element" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element ref="{http://www.openkoncept.net/schema/vroom-config/3.0}event" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://www.openkoncept.net/schema/vroom-config/3.0}event" maxOccurs="unbounded"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="method" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="bean-class" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="var" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="scope" type="{http://www.openkoncept.net/schema/vroom-config/3.0}scopeType" default="session" />
@@ -45,84 +43,21 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "navigation",
-    "element",
     "event"
 })
-@XmlRootElement(name = "form")
-public class Form {
+@XmlRootElement(name = "object")
+public class Object {
 
-    protected List<Navigation> navigation;
-    protected List<Element> element;
+    @XmlElement(required = true)
     protected List<Event> event;
     @XmlAttribute(required = true)
-    protected String id;
-    @XmlAttribute
-    protected String method;
+    protected String name;
     @XmlAttribute(name = "bean-class")
     protected String beanClass;
     @XmlAttribute
     protected String var;
     @XmlAttribute
     protected ScopeType scope;
-
-    /**
-     * Gets the value of the navigation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the navigation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getNavigation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Navigation }
-     * 
-     * 
-     */
-    public List<Navigation> getNavigation() {
-        if (navigation == null) {
-            navigation = new ArrayList<Navigation>();
-        }
-        return this.navigation;
-    }
-
-    /**
-     * Gets the value of the element property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the element property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getElement().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
-     */
-    public List<Element> getElement() {
-        if (element == null) {
-            element = new ArrayList<Element>();
-        }
-        return this.element;
-    }
 
     /**
      * Gets the value of the event property.
@@ -154,51 +89,27 @@ public class Form {
     }
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the method property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMethod() {
-        return method;
-    }
-
-    /**
-     * Sets the value of the method property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMethod(String value) {
-        this.method = value;
+    public void setName(String value) {
+        this.name = value;
     }
 
     /**

@@ -38,30 +38,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import net.openkoncept.vroom.config.Form;
 
 /**
- * <p>
- * VroomServlet is one of the core classes of Vroom framework. It's is responsible to serve javasciprts as requested
- * and to invoke methods of the bean classes bound to forms and various events.
- * </p>
- * <p>
- * VroomServlet accepts following request parameters:
- * <ul>
- * <li>rt - Request Type, it can be "js" (to serve javascript) or "invoke" (method in a java bean)</li>
- * <li>method - It's applicable only if the Request type is "js" and possible values are "src" (a *.js file located on
- * a the disk) or "generate" (to generate the javascript at runtime for the request uri)</li>
- * <li>uri - Request URI</li>
- * <li>bean-class - The java bean class which contains the method to invoke. This is applicable only if the Request
- * type is "invoke"</li>
- * <li>handle - A method defined in the java bean class. The valid signature of the method is <br/>
+ * <p> VroomServlet is one of the core classes of Vroom framework. It's is
+ * responsible to serve javasciprts as requested and to invoke methods of the
+ * bean classes bound to forms and various events. </p> <p> VroomServlet accepts
+ * following request parameters: <ul> <li>rt - Request Type, it can be "js" (to
+ * serve javascript) or "invoke" (method in a java bean)</li> <li>method - It's
+ * applicable only if the Request type is "js" and possible values are "src" (a
+ * *.js file located on a the disk) or "generate" (to generate the javascript at
+ * runtime for the request uri)</li> <li>uri - Request URI</li> <li>bean-class -
+ * The java bean class which contains the method to invoke. This is applicable
+ * only if the Request type is "invoke"</li> <li>handle - A method defined in
+ * the java bean class. The valid signature of the method is <br/>
  * <code>public &lt;&gt;a valid java object or void&lt;method-name&gt;(HttpServletRequest, HttpServletResponse)</code>
- * <br/>
- * A valid java object is String, Object, Map, Array, JSONObject
- * </li>
+ * <br/> A valid java object is String, Object, Map, Array, JSONObject </li>
  * <li>var - The variable name for the object to look for in a scope</li>
- * <li>scope - The scope of the object (valid values are "application", "session" or "request")</li>
- * </ul>
- * </p>
+ * <li>scope - The scope of the object (valid values are "application",
+ * "session" or "request")</li> </ul> </p>
  *
  * @author Farrukh Ijaz Muhammad Riaz (ijazfx@yahoo.com)
  */
@@ -92,24 +87,20 @@ public class VroomController extends HttpServlet {
     public static final String HTML_MIME_TYPE = "text/html";
     public static final String JS_MIME_TYPE = "text/javascript";
     public static final String JSON_MIME_TYPE = "application/json";
-
     public static final String FILE_UPLOAD_SIZE_THRESHOLD = "file-upload-size-threshold";
     public static final String FILE_UPLOAD_TEMP_FOLDER = "file-upload-temp-folder";
-
     public static final String CHARSET_UTF8 = "charset=UTF-8";
     public static final String CHARSET = "charset=";
-
     public static Map appBeanMap = Collections.synchronizedMap(new LinkedHashMap());
 
     /**
-     * <p>
-     * This method analyzes the request and delegate control to other methods for processing.
-     * </p>
+     * <p> This method analyzes the request and delegate control to other
+     * methods for processing. </p>
      *
-     * @param request  - HttpServletRequest
+     * @param request - HttpServletRequest
      * @param response - HttpServletResponse
      * @throws ServletException - ServletException
-     * @throws IOException      - IOException
+     * @throws IOException - IOException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -202,18 +193,16 @@ public class VroomController extends HttpServlet {
 
         try {
             Class clazz = Class.forName(beanClass);
-            // Setting values to beans before calling the method...
-            List elements = VroomConfig.getInstance().getElements(uri, id, method, beanClass, var, scope);
-            Iterator iter = elements.iterator();
             Class elemClass = clazz;
-            while (iter.hasNext()) {
-                String eId, eProperty, eBeanClass, eVar, eScope, eFormat;
-                Element e = (Element) iter.next();
+            String eId, eProperty, eBeanClass, eVar, eScope, eFormat;
+            // Setting values to beans before calling the method...
+            List<Element> elements = VroomConfig.getInstance().getElements(uri, id, method, beanClass, var, scope);
+            for (Element e : elements) {
                 eId = e.getId();
                 eProperty = (e.getProperty() != null) ? e.getProperty() : eId;
                 eBeanClass = (e.getBeanClass() != null) ? e.getBeanClass() : beanClass;
                 eVar = (e.getVar() != null) ? e.getVar() : var;
-                eScope = (e.getBeanClass() != null) ? e.getScope() : scope;
+                eScope = (e.getBeanClass() != null) ? e.getScope().value() : scope;
                 eFormat = e.getFormat();
                 if (!elemClass.getName().equals(eBeanClass)) {
                     try {
@@ -245,17 +234,13 @@ public class VroomController extends HttpServlet {
             Method m = clazz.getMethod(method, signature);
             Object object = m.invoke(beanObject, new Object[]{request, response});
             // Getting updating values from beans to pass as postback for the forward calls.
-            Map postbackMap = new HashMap();
-            iter = elements.iterator();
-            elemClass = clazz;
-            while (iter.hasNext()) {
-                String eId, eProperty, eBeanClass, eVar, eScope, eFormat;
-                Element e = (Element) iter.next();
+            Map<String, Object> postbackMap = new HashMap<String, Object>();
+            for(Element e : elements) {
                 eId = e.getId();
                 eProperty = (e.getProperty() != null) ? e.getProperty() : eId;
                 eBeanClass = (e.getBeanClass() != null) ? e.getBeanClass() : beanClass;
                 eVar = (e.getVar() != null) ? e.getVar() : var;
-                eScope = (e.getBeanClass() != null) ? e.getScope() : scope;
+                eScope = (e.getBeanClass() != null) ? e.getScope().value() : scope;
                 eFormat = e.getFormat();
                 if (!elemClass.getName().equals(eBeanClass)) {
                     try {
@@ -295,8 +280,7 @@ public class VroomController extends HttpServlet {
                         url = "/";
                     }
                     url = url.replaceAll("#\\{contextPath}", request.getContextPath());
-                    boolean forward = n.getForward().booleanValue();
-                    if (forward) {
+                    if (n.isForward()) {
                         String ctxPath = request.getContextPath();
                         if (url.startsWith(ctxPath)) {
                             url = url.substring(ctxPath.length());
@@ -483,7 +467,6 @@ public class VroomController extends HttpServlet {
         return beanObject;
     }
 
-
     private void processRequestInvoke(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String method = request.getParameter(METHOD);
         String beanClass = request.getParameter(BEAN_CLASS);
@@ -564,7 +547,7 @@ public class VroomController extends HttpServlet {
             }
             response.setContentType(JSON_MIME_TYPE);
             if (encoding != null) {
-                VroomUtilities.safeCall(response, "setCharacterEncoding", new Class[] {String.class}, new Object[] {encoding});
+                VroomUtilities.safeCall(response, "setCharacterEncoding", new Class[]{String.class}, new Object[]{encoding});
 //                response.setCharacterEncoding(encoding);
             }
             PrintWriter out = null;
@@ -599,7 +582,7 @@ public class VroomController extends HttpServlet {
         }
         response.setContentType(JS_MIME_TYPE);
         if (encoding != null) {
-            VroomUtilities.safeCall(response, "setCharacterEncoding", new Class[] {String.class}, new Object[] {encoding});
+            VroomUtilities.safeCall(response, "setCharacterEncoding", new Class[]{String.class}, new Object[]{encoding});
 //            response.setCharacterEncoding(encoding);
         }
         PrintWriter out = null;
@@ -638,7 +621,7 @@ public class VroomController extends HttpServlet {
             }
             response.setContentType(JS_MIME_TYPE);
             if (encoding != null) {
-                VroomUtilities.safeCall(response, "setCharacterEncoding", new Class[] {String.class}, new Object[] {encoding});
+                VroomUtilities.safeCall(response, "setCharacterEncoding", new Class[]{String.class}, new Object[]{encoding});
 //                response.setCharacterEncoding(encoding);
             }
             PrintWriter out = null;
@@ -656,16 +639,16 @@ public class VroomController extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
     protected int fileUploadSizeThreshold;
     protected File fileUploadTempFolder;
 
@@ -698,9 +681,10 @@ public class VroomController extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
