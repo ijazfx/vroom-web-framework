@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vroom-config xmlns="http://www.openkoncept.net/schema/vroom-config/2.2"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.openkoncept.net/schema/vroom-config/2.2 vroom-config-2.2.xsd">
+
+    <webpage uri="/|/index.jsp">
+        <rdf url="#" title="Some News"/>
+        <rdf url="#" title="Some Other News"/>
+        <event type="onload">
+            <call type="update" id="p1" attribute="innerHTML" url="#{contextPath}/welcome.jsp"/>
+        </event>
+    </webpage>
+
+    <webpage uri="/index.xhtml">
+        <event type="onload">
+            <call type="script" value="alert('Hello')"/>
+        </event>
+    </webpage>
+
+</vroom-config>
