@@ -269,7 +269,7 @@ public class VroomScriptGenerator {
         StringBuffer sbCalls = new StringBuffer();
         while (iter.hasNext()) {
             Call call = (Call) iter.next();
-            sbCalls.append(call.getType() + "|");
+            sbCalls.append(call.getType().value() + "|");
             if (CallType.UPDATE.equals(call.getType())) {
                 sbCalls.append(call.getId() + "|");
                 sbCalls.append(call.getTag() + "|");
@@ -281,7 +281,7 @@ public class VroomScriptGenerator {
                 url = url.replaceAll("#\\{contextPath}", contextPath);
                 sbCalls.append("url[").append(url).append("]");
             } else {
-                String value = call.getValue().replaceAll("\\\\'", "&#x5C;&#x27;");
+                String value = call.getValueAttribute().replaceAll("\\\\'", "&#x5C;&#x27;");
                 value = value.replaceAll("'", "&#x27;");
                 sbCalls.append(value);
             }

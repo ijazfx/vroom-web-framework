@@ -20,6 +20,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -81,12 +82,16 @@ public class VroomConfig {
     private static VroomConfig _instance;
     private static String _configFile = null;
     private static long _lastModified = 0L;
+    
+    @XmlTransient
+    private Map<String, Boolean> uriInDefinition = Collections.synchronizedMap(new HashMap<String, Boolean>());
 
     public static VroomConfig initialize(String configFile) {
         _configFile = configFile;
         try {
             _reload();
         } catch (JAXBException ex) {
+            ex.printStackTrace();
             logger.log(Level.SEVERE, null, ex);
         }
         return _instance;
@@ -96,7 +101,7 @@ public class VroomConfig {
         File _file = new File(_configFile);
         if (_lastModified != _file.lastModified()) {
             _lastModified = _file.lastModified();
-            JAXBContext ctx = JAXBContext.newInstance(VroomConfig.class.getPackage().getName());
+            JAXBContext ctx = JAXBContext.newInstance("net.openkoncept.vroom.config");
             Unmarshaller um = ctx.createUnmarshaller();
             _instance = (VroomConfig) um.unmarshal(new File(_configFile));
         }
@@ -115,7 +120,6 @@ public class VroomConfig {
     public static VroomConfig getInstance() {
         return _instance;
     }
-    public Map<String, Boolean> uriInDefinition = Collections.synchronizedMap(new HashMap<String, Boolean>());
 
     public boolean isUriInDefinition(String uri) {
         if (!uriInDefinition.containsKey(uri)) {

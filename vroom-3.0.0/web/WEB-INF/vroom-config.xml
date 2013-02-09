@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<vroom-config xmlns="http://www.openkoncept.net/schema/vroom-config/2.2"
+<vroom-config xmlns="http://www.openkoncept.net/schema/vroom-config/3.0"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://www.openkoncept.net/schema/vroom-config/2.2 vroom-config-2.2.xsd">
+              xsi:schemaLocation="http://www.openkoncept.net/schema/vroom-config/3.0 vroom-config.xsd">
 
     <webpage uri="/|/index.jsp">
         <rdf url="#" title="Some News"/>
@@ -11,7 +11,7 @@
         </event>
     </webpage>
 
-    <webpage uri="/index.xhtml">
+    <webpage uri="/|/index.jsp">
         <event type="onload">
             <call type="script" value="alert('Hello')"/>
         </event>
